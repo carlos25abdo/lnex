@@ -1,0 +1,258 @@
+// ====== Data ======
+const courses = [
+    {
+      id: "c1",
+      title: "أساسيات البرمجة بلغة Python",
+      desc: "ابدأ من الصفر حتى كتابة مشاريع عملية.",
+      level: "beginner",
+      duration: "6 أسابيع",
+      days: "3 أيام بالأسبوع",
+      price: 450,
+      seats: 18,
+      category: "Programming"
+    },
+    {
+      id: "c2",
+      title: "تصميم جرافيك (Photoshop + Illustrator)",
+      desc: "تعلم التصميم من خلال تطبيقات عملية.",
+      level: "beginner",
+      duration: "5 أسابيع",
+      days: "يومان بالأسبوع",
+      price: 380,
+      seats: 15,
+      category: "Design"
+    },
+    {
+      id: "c3",
+      title: "شبكات CCNA (مستوى 1)",
+      desc: "أساسيات الشبكات مع لابات حقيقية.",
+      level: "intermediate",
+      duration: "8 أسابيع",
+      days: "3 أيام بالأسبوع",
+      price: 900,
+      seats: 12,
+      category: "Networks"
+    },
+    {
+      id: "c4",
+      title: "أمن سيبراني (Fundamentals)",
+      desc: "مقدمة قوية لأهم مفاهيم الأمن السيبراني.",
+      level: "intermediate",
+      duration: "6 أسابيع",
+      days: "يومان بالأسبوع",
+      price: 650,
+      seats: 14,
+      category: "Security"
+    },
+    {
+      id: "c5",
+      title: "تطوير مواقع Web Full-Stack",
+      desc: "HTML/CSS/JS + Backend + مشاريع متكاملة.",
+      level: "advanced",
+      duration: "10 أسابيع",
+      days: "3 أيام بالأسبوع",
+      price: 1200,
+      seats: 10,
+      category: "Programming"
+    },
+    {
+      id: "c6",
+      title: "ذكاء اصطناعي وتعلم آلة",
+      desc: "مفاهيم AI/ML وتطبيقات عملية.",
+      level: "advanced",
+      duration: "9 أسابيع",
+      days: "يومان بالأسبوع",
+      price: 1500,
+      seats: 8,
+      category: "AI"
+    }
+  ];
+  
+  // ====== Render Courses ======
+  const grid = document.getElementById("coursesGrid");
+  const searchInput = document.getElementById("searchInput");
+  const levelFilter = document.getElementById("levelFilter");
+  
+  function levelLabel(level){
+    if(level==="beginner") return "مبتدئ";
+    if(level==="intermediate") return "متوسط";
+    return "متقدم";
+  }
+  
+  function renderCourses(list){
+    grid.innerHTML = "";
+    if(!list.length){
+      grid.innerHTML = `<div class="course-card"><h3>لا يوجد نتائج</h3><p>جرّب بحث آخر.</p></div>`;
+      return;
+    }
+  
+    list.forEach(c=>{
+      const card = document.createElement("div");
+      card.className = "course-card";
+      card.innerHTML = `
+        <div class="course-meta">
+          <span class="tag">${levelLabel(c.level)}</span>
+          <span class="tag">${c.duration}</span>
+          <span class="tag">${c.days}</span>
+          <span class="tag">المقاعد: ${c.seats}</span>
+        </div>
+        <h3>${c.title}</h3>
+        <p>${c.desc}</p>
+  
+        <div class="course-foot">
+          <div class="price">${c.price} د.ل</div>
+          <button class="btn primary" data-id="${c.id}">تسجيل</button>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  
+    // attach click
+    document.querySelectorAll(".course-card .btn.primary").forEach(btn=>{
+      btn.addEventListener("click", ()=> openModal(btn.dataset.id));
+    });
+  }
+  
+  function applyFilters(){
+    const q = searchInput.value.trim().toLowerCase();
+    const level = levelFilter.value;
+  
+    const filtered = courses.filter(c=>{
+      const matchesQ = c.title.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q);
+      const matchesLevel = level==="all" ? true : c.level===level;
+      return matchesQ && matchesLevel;
+    });
+  
+    renderCourses(filtered);
+  }
+  
+  searchInput.addEventListener("input", applyFilters);
+  levelFilter.addEventListener("change", applyFilters);
+  renderCourses(courses);
+  
+  // ====== Modal Logic ======
+  const modal = document.getElementById("regModal");
+  const modalClose = document.getElementById("modalClose");
+  const modalTitle = document.getElementById("modalCourseTitle");
+  const selectedCourseId = document.getElementById("selectedCourseId");
+  
+  const regForm = document.getElementById("regForm");
+  const fullName = document.getElementById("fullName");
+  const phone = document.getElementById("phone");
+  const email = document.getElementById("email");
+  const city = document.getElementById("city");
+  const notes = document.getElementById("notes");
+  const savedHint = document.getElementById("savedHint");
+  
+  function openModal(courseId){
+    const course = courses.find(x=>x.id===courseId);
+    modalTitle.textContent = `التسجيل في: ${course.title}`;
+    selectedCourseId.value = course.id;
+  
+    // Load saved draft per course
+    const draftKey = `lenix_draft_${course.id}`;
+    const draft = JSON.parse(localStorage.getItem(draftKey) || "{}");
+  
+    fullName.value = draft.fullName || "";
+    phone.value = draft.phone || "";
+    email.value = draft.email || "";
+    city.value = draft.city || "";
+    notes.value = draft.notes || "";
+  
+    savedHint.textContent = draft.fullName ? "✅ تم استرجاع بياناتك السابقة لهذا الكورس" : "";
+  
+    modal.classList.add("show");
+  }
+  
+  modalClose.addEventListener("click", ()=> modal.classList.remove("show"));
+  modal.addEventListener("click", (e)=>{
+    if(e.target === modal) modal.classList.remove("show");
+  });
+  
+  // Auto-save draft
+  [fullName, phone, email, city, notes].forEach(inp=>{
+    inp.addEventListener("input", ()=>{
+      const id = selectedCourseId.value;
+      if(!id) return;
+      const draftKey = `lenix_draft_${id}`;
+      const draft = {
+        fullName: fullName.value,
+        phone: phone.value,
+        email: email.value,
+        city: city.value,
+        notes: notes.value
+      };
+      localStorage.setItem(draftKey, JSON.stringify(draft));
+      savedHint.textContent = "💾 تم حفظ البيانات مؤقتًا";
+    });
+  });
+  
+  // Submit
+  regForm.addEventListener("submit",(e)=>{
+    e.preventDefault();
+    const id = selectedCourseId.value;
+    const course = courses.find(x=>x.id===id);
+  
+    // naive validation
+    if(fullName.value.trim().length < 3){
+      alert("رجاءً أدخل اسم صحيح");
+      return;
+    }
+    if(!phone.value.match(/^09\d{8}$/)){
+      alert("رقم الهاتف لازم يكون بصيغة 09xxxxxxxx");
+      return;
+    }
+  
+    // store registrations
+    const regs = JSON.parse(localStorage.getItem("lenix_regs")||"[]");
+    regs.push({
+      id: crypto.randomUUID(),
+      courseId: id,
+      courseTitle: course.title,
+      fullName: fullName.value.trim(),
+      phone: phone.value.trim(),
+      email: email.value.trim(),
+      city: city.value.trim(),
+      notes: notes.value.trim(),
+      createdAt: new Date().toISOString()
+    });
+    localStorage.setItem("lenix_regs", JSON.stringify(regs));
+  
+    // clear draft
+    localStorage.removeItem(`lenix_draft_${id}`);
+  
+    alert("✅ تم تسجيلك بنجاح! سيتم التواصل معك قريبًا.");
+    regForm.reset();
+    modal.classList.remove("show");
+  });
+  
+  // ====== Theme Toggle ======
+  const themeToggle = document.getElementById("themeToggle");
+  const savedTheme = localStorage.getItem("lenix_theme");
+  if(savedTheme==="light") document.body.classList.add("light");
+  
+  function updateThemeIcon(){
+    themeToggle.textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
+  }
+  updateThemeIcon();
+  
+  themeToggle.addEventListener("click", ()=>{
+    document.body.classList.toggle("light");
+    localStorage.setItem("lenix_theme", document.body.classList.contains("light") ? "light" : "dark");
+    updateThemeIcon();
+  });
+  
+  // ====== Mobile Menu ======
+  const hamburger = document.getElementById("hamburger");
+  const navLinks = document.getElementById("navLinks");
+  hamburger.addEventListener("click", ()=>{
+    navLinks.classList.toggle("show");
+  });
+  
+  // ====== Smooth scroll ======
+  function scrollToSection(id){
+    document.getElementById(id).scrollIntoView({behavior:"smooth"});
+    navLinks.classList.remove("show");
+  }
+  window.scrollToSection = scrollToSection;
+  
