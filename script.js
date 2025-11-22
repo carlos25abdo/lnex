@@ -1,74 +1,12 @@
-// ====== Data ======
 const courses = [
-    {
-      id: "c1",
-      title: "أساسيات البرمجة بلغة Python",
-      desc: "ابدأ من الصفر حتى كتابة مشاريع عملية.",
-      level: "beginner",
-      duration: "6 أسابيع",
-      days: "3 أيام بالأسبوع",
-      price: 450,
-      seats: 18,
-      category: "Programming"
-    },
-    {
-      id: "c2",
-      title: "تصميم جرافيك (Photoshop + Illustrator)",
-      desc: "تعلم التصميم من خلال تطبيقات عملية.",
-      level: "beginner",
-      duration: "5 أسابيع",
-      days: "يومان بالأسبوع",
-      price: 380,
-      seats: 15,
-      category: "Design"
-    },
-    {
-      id: "c3",
-      title: "شبكات CCNA (مستوى 1)",
-      desc: "أساسيات الشبكات مع لابات حقيقية.",
-      level: "intermediate",
-      duration: "8 أسابيع",
-      days: "3 أيام بالأسبوع",
-      price: 900,
-      seats: 12,
-      category: "Networks"
-    },
-    {
-      id: "c4",
-      title: "أمن سيبراني (Fundamentals)",
-      desc: "مقدمة قوية لأهم مفاهيم الأمن السيبراني.",
-      level: "intermediate",
-      duration: "6 أسابيع",
-      days: "يومان بالأسبوع",
-      price: 650,
-      seats: 14,
-      category: "Security"
-    },
-    {
-      id: "c5",
-      title: "تطوير مواقع Web Full-Stack",
-      desc: "HTML/CSS/JS + Backend + مشاريع متكاملة.",
-      level: "advanced",
-      duration: "10 أسابيع",
-      days: "3 أيام بالأسبوع",
-      price: 1200,
-      seats: 10,
-      category: "Programming"
-    },
-    {
-      id: "c6",
-      title: "ذكاء اصطناعي وتعلم آلة",
-      desc: "مفاهيم AI/ML وتطبيقات عملية.",
-      level: "advanced",
-      duration: "9 أسابيع",
-      days: "يومان بالأسبوع",
-      price: 1500,
-      seats: 8,
-      category: "AI"
-    }
+    { id:"c1", title:"أساسيات البرمجة بلغة Python", desc:"ابدأ من الصفر حتى كتابة مشاريع عملية.", level:"beginner", duration:"6 أسابيع", days:"3 أيام بالأسبوع", price:450, seats:18, category:"Programming" },
+    { id:"c2", title:"تصميم جرافيك (Photoshop + Illustrator)", desc:"تعلم التصميم من خلال تطبيقات عملية.", level:"beginner", duration:"5 أسابيع", days:"يومان بالأسبوع", price:380, seats:15, category:"Design" },
+    { id:"c3", title:"شبكات CCNA (مستوى 1)", desc:"أساسيات الشبكات مع لابات حقيقية.", level:"intermediate", duration:"8 أسابيع", days:"3 أيام بالأسبوع", price:900, seats:12, category:"Networks" },
+    { id:"c4", title:"أمن سيبراني (Fundamentals)", desc:"مقدمة قوية لأهم مفاهيم الأمن السيبراني.", level:"intermediate", duration:"6 أسابيع", days:"يومان بالأسبوع", price:650, seats:14, category:"Security" },
+    { id:"c5", title:"تطوير مواقع Web Full-Stack", desc:"HTML/CSS/JS + Backend + مشاريع متكاملة.", level:"advanced", duration:"10 أسابيع", days:"3 أيام بالأسبوع", price:1200, seats:10, category:"Programming" },
+    { id:"c6", title:"ذكاء اصطناعي وتعلم آلة", desc:"مفاهيم AI/ML وتطبيقات عملية.", level:"advanced", duration:"9 أسابيع", days:"يومان بالأسبوع", price:1500, seats:8, category:"AI" }
   ];
   
-  // ====== Render Courses ======
   const grid = document.getElementById("coursesGrid");
   const searchInput = document.getElementById("searchInput");
   const levelFilter = document.getElementById("levelFilter");
@@ -98,7 +36,6 @@ const courses = [
         </div>
         <h3>${c.title}</h3>
         <p>${c.desc}</p>
-  
         <div class="course-foot">
           <div class="price">${c.price} د.ل</div>
           <button class="btn primary" data-id="${c.id}">تسجيل</button>
@@ -107,7 +44,6 @@ const courses = [
       grid.appendChild(card);
     });
   
-    // attach click
     document.querySelectorAll(".course-card .btn.primary").forEach(btn=>{
       btn.addEventListener("click", ()=> openModal(btn.dataset.id));
     });
@@ -130,7 +66,7 @@ const courses = [
   levelFilter.addEventListener("change", applyFilters);
   renderCourses(courses);
   
-  // ====== Modal Logic ======
+  // Modal
   const modal = document.getElementById("regModal");
   const modalClose = document.getElementById("modalClose");
   const modalTitle = document.getElementById("modalCourseTitle");
@@ -149,7 +85,6 @@ const courses = [
     modalTitle.textContent = `التسجيل في: ${course.title}`;
     selectedCourseId.value = course.id;
   
-    // Load saved draft per course
     const draftKey = `lenix_draft_${course.id}`;
     const draft = JSON.parse(localStorage.getItem(draftKey) || "{}");
   
@@ -160,16 +95,12 @@ const courses = [
     notes.value = draft.notes || "";
   
     savedHint.textContent = draft.fullName ? "✅ تم استرجاع بياناتك السابقة لهذا الكورس" : "";
-  
     modal.classList.add("show");
   }
   
   modalClose.addEventListener("click", ()=> modal.classList.remove("show"));
-  modal.addEventListener("click", (e)=>{
-    if(e.target === modal) modal.classList.remove("show");
-  });
+  modal.addEventListener("click", (e)=>{ if(e.target === modal) modal.classList.remove("show"); });
   
-  // Auto-save draft
   [fullName, phone, email, city, notes].forEach(inp=>{
     inp.addEventListener("input", ()=>{
       const id = selectedCourseId.value;
@@ -187,13 +118,11 @@ const courses = [
     });
   });
   
-  // Submit
   regForm.addEventListener("submit",(e)=>{
     e.preventDefault();
     const id = selectedCourseId.value;
     const course = courses.find(x=>x.id===id);
   
-    // naive validation
     if(fullName.value.trim().length < 3){
       alert("رجاءً أدخل اسم صحيح");
       return;
@@ -203,7 +132,6 @@ const courses = [
       return;
     }
   
-    // store registrations
     const regs = JSON.parse(localStorage.getItem("lenix_regs")||"[]");
     regs.push({
       id: crypto.randomUUID(),
@@ -217,8 +145,6 @@ const courses = [
       createdAt: new Date().toISOString()
     });
     localStorage.setItem("lenix_regs", JSON.stringify(regs));
-  
-    // clear draft
     localStorage.removeItem(`lenix_draft_${id}`);
   
     alert("✅ تم تسجيلك بنجاح! سيتم التواصل معك قريبًا.");
@@ -226,30 +152,34 @@ const courses = [
     modal.classList.remove("show");
   });
   
-  // ====== Theme Toggle ======
+  // Theme
   const themeToggle = document.getElementById("themeToggle");
   const savedTheme = localStorage.getItem("lenix_theme");
   if(savedTheme==="light") document.body.classList.add("light");
-  
   function updateThemeIcon(){
     themeToggle.textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
   }
   updateThemeIcon();
-  
   themeToggle.addEventListener("click", ()=>{
     document.body.classList.toggle("light");
     localStorage.setItem("lenix_theme", document.body.classList.contains("light") ? "light" : "dark");
     updateThemeIcon();
   });
   
-  // ====== Mobile Menu ======
+  // Mobile Menu
   const hamburger = document.getElementById("hamburger");
   const navLinks = document.getElementById("navLinks");
-  hamburger.addEventListener("click", ()=>{
-    navLinks.classList.toggle("show");
+  hamburger.addEventListener("click", ()=> navLinks.classList.toggle("show"));
+  
+  // close menu when clicking any link
+  navLinks.querySelectorAll("a").forEach(a=>{
+    a.addEventListener("click", ()=> navLinks.classList.remove("show"));
   });
   
-  // ====== Smooth scroll ======
+  // close menu on scroll (nice on mobile)
+  window.addEventListener("scroll", ()=> navLinks.classList.remove("show"));
+  
+  // Smooth scroll
   function scrollToSection(id){
     document.getElementById(id).scrollIntoView({behavior:"smooth"});
     navLinks.classList.remove("show");
