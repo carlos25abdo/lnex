@@ -1,314 +1,240 @@
-// =========================
-//  HELPERS
-// =========================
-function safeId() {
-    // fallback لو randomUUID مش مدعوم
+// Helpers
+function safeId(){
     if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
-    return Date.now().toString() + Math.floor(Math.random() * 9999);
+    return Date.now().toString() + Math.floor(Math.random()*9999);
   }
   
-  // =========================
-  //  LOADING INTRO
-  // =========================
+  // Loading intro
   window.addEventListener("load", () => {
     const loadingScreen = document.getElementById("loading-screen");
     const letters = document.querySelectorAll(".loading-word span");
+    if (!loadingScreen) return;
   
-    if (!loadingScreen || !letters.length) return;
-  
-    letters.forEach(letter => {
-      letter.style.setProperty("--x", Math.random());
-      letter.style.setProperty("--y", Math.random());
+    letters.forEach(l=>{
+      l.style.setProperty("--x", Math.random());
+      l.style.setProperty("--y", Math.random());
     });
   
-    setTimeout(() => {
-      const word = document.querySelector(".loading-word");
-      if (word) word.classList.add("unassemble");
-    }, 1500);
-  
-    setTimeout(() => {
-      loadingScreen.classList.add("fade-out");
-    }, 2500);
-  
-    setTimeout(() => {
-      loadingScreen.style.display = "none";
-    }, 3300);
+    setTimeout(()=> document.querySelector(".loading-word")?.classList.add("unassemble"), 1400);
+    setTimeout(()=> loadingScreen.classList.add("fade-out"), 2300);
+    setTimeout(()=> loadingScreen.remove(), 3100);
   });
   
-  
-  // =========================
-  //  COURSES DATA + RENDER
-  // =========================
+  // Courses
   const courses = [
-    { id:"c1", title:"أساسيات البرمجة بلغة Python", desc:"ابدأ من الصفر حتى كتابة مشاريع عملية.", level:"beginner", duration:"6 أسابيع", days:"3 أيام بالأسبوع", price:450, seats:18 },
-    { id:"c2", title:"تصميم جرافيك (Photoshop + Illustrator)", desc:"تعلم التصميم من خلال تطبيقات عملية.", level:"beginner", duration:"5 أسابيع", days:"يومان بالأسبوع", price:380, seats:15 },
-    { id:"c3", title:"شبكات CCNA (مستوى 1)", desc:"أساسيات الشبكات مع لابات حقيقية.", level:"intermediate", duration:"8 أسابيع", days:"3 أيام بالأسبوع", price:900, seats:12 },
-    { id:"c4", title:"أمن سيبراني (Fundamentals)", desc:"مقدمة قوية لأهم مفاهيم الأمن السيبراني.", level:"intermediate", duration:"6 أسابيع", days:"يومان بالأسبوع", price:650, seats:14 },
-    { id:"c5", title:"تطوير مواقع Web Full-Stack", desc:"HTML/CSS/JS + Backend + مشاريع متكاملة.", level:"advanced", duration:"10 أسابيع", days:"3 أيام بالأسبوع", price:1200, seats:10 },
-    { id:"c6", title:"ذكاء اصطناعي وتعلم آلة", desc:"مفاهيم AI/ML وتطبيقات عملية.", level:"advanced", duration:"9 أسابيع", days:"يومان بالأسبوع", price:1500, seats:8 }
+    {
+      id:"flutter1",
+      title:"كورس Flutter المستوى الأول",
+      desc:"من البداية إلى مشروعك الأول. أساسيات Flutter + Widgets + Layout + Navigation + State + APIs + Firebase مع مشروع نهائي.",
+      level:"مبتدئ",
+      duration:"10 أيام",
+      days:"حسب الجدول",
+      price:400,
+      seats:"حسب العدد",
+      note:"الموعد بعد اكتمال العدد"
+    },
+    {
+      id:"tot",
+      title:"برنامج إعداد المدرب الناجح وتدريب المدربين TOT",
+      desc:"برنامج مكثف لتأهيل المدربين: مفاهيم التدريب، تصميم الحقائب، أنماط المتدربين، مهارات التواصل، أدوات وأساليب التدريب، وتسويق الذات كمدرب.",
+      level:"عام",
+      duration:"25 ساعة تدريبية",
+      days:"5 أيام (5 ساعات يوميًا)",
+      price:null,
+      seats:"غير محدد",
+      note:"مع المدربة: أ. اسعاد إبراهيم الفساطوي"
+    },
+    {
+      id:"webdesign",
+      title:"كورس تصميم صفحات الويب",
+      desc:"HTML + CSS + JavaScript + Bootstrap مع مشروع عملي نهائي (موقع متكامل متعدد الصفحات ومتجاوب).",
+      level:"مبتدئ",
+      duration:"4 أسابيع",
+      days:"حسب الجدول",
+      price:480,
+      seats:"حسب العدد",
+      note:"الموعد بعد اكتمال العدد"
+    },
+    {
+      id:"data_ai_beginner",
+      title:"ورشة تحليل البيانات والذكاء الاصطناعي للمبتدئين",
+      desc:"أساسيات تحليل البيانات + مقدمة تعلم الآلة Python + مشروع تطبيقي.",
+      level:"مبتدئ",
+      duration:"3 أيام (9 ساعات)",
+      days:"3 ساعات يوميًا",
+      price:190,
+      seats:"غير محدد",
+      note:""
+    },
+    {
+      id:"ai_meetings",
+      title:"ورشة إدارة محاضر الاجتماعات بالذكاء الاصطناعي",
+      desc:"تحويل الصوت إلى نص، تلخيص النقاشات، استخراج القرارات والمهام، وتطبيق عملي.",
+      level:"عام",
+      duration:"يومان",
+      days:"3 ساعات يوميًا",
+      price:130,
+      seats:"غير محدد",
+      note:""
+    },
+    {
+      id:"ai_teachers",
+      title:"ورشة أدوات الذكاء الاصطناعي للمعلمين",
+      desc:"استخدام AI في التحضير والتقييم وإنشاء الأنشطة والاختبارات.",
+      level:"عام",
+      duration:"يوم واحد",
+      days:"4 ساعات",
+      price:65,
+      seats:"غير محدد",
+      note:""
+    },
+    {
+      id:"faceless_youtube",
+      title:"ورشة ذكاء الفيديو الصامت – أنشئ قناتك بدون تصوير",
+      desc:"Faceless YouTube Automation باستخدام أدوات AI + CapCut مع تطبيق كامل.",
+      level:"مبتدئ إلى متوسط",
+      duration:"5 أيام (15 ساعة)",
+      days:"3 ساعات يوميًا",
+      price:250,
+      seats:"غير محدد",
+      note:"يشمل ملفات وموارد جاهزة + دعم ما بعد الدورة"
+    }
   ];
   
-  const grid = document.getElementById("coursesGrid");
-  const searchInput = document.getElementById("searchInput");
-  const levelFilter = document.getElementById("levelFilter");
+  // Init DOM
+  window.addEventListener("DOMContentLoaded", () => {
+    const courseSelect = document.getElementById("courseSelect");
+    const courseDetails = document.getElementById("courseDetails");
+    const ageSelect = document.getElementById("ageSelect");
   
-  function levelLabel(level){
-    if(level==="beginner") return "مبتدئ";
-    if(level==="intermediate") return "متوسط";
-    return "متقدم";
-  }
-  
-  function renderCourses(list){
-    if (!grid) return;
-  
-    grid.innerHTML = "";
-    if(!list.length){
-      grid.innerHTML = `<div class="course-card"><h3>لا يوجد نتائج</h3><p>جرّب بحث آخر.</p></div>`;
-      return;
+    // Ages
+    ageSelect.innerHTML = `<option value="" disabled selected>اختر العمر...</option>`;
+    for(let i=10;i<=70;i++){
+      ageSelect.innerHTML += `<option value="${i}">${i}</option>`;
     }
   
-    list.forEach(c=>{
-      const card = document.createElement("div");
-      card.className = "course-card reveal";
-      card.innerHTML = `
-        <div class="course-meta">
-          <span class="tag">${levelLabel(c.level)}</span>
-          <span class="tag">${c.duration}</span>
-          <span class="tag">${c.days}</span>
+    // Courses list
+    courseSelect.innerHTML =
+      `<option value="" disabled selected>اختر الكورس...</option>` +
+      courses.map(c=> `<option value="${c.id}">${c.title}</option>`).join("");
+  
+    // Show details
+    courseSelect.addEventListener("change", () => {
+      const c = courses.find(x=>x.id===courseSelect.value);
+      if(!c){
+        courseDetails.classList.remove("show");
+        courseDetails.innerHTML="";
+        return;
+      }
+      const priceTxt = c.price==null ? "تُحدَّد لاحقًا" : `${c.price} د.ل`;
+      const noteTxt = c.note ? `<p class="small">📌 ${c.note}</p>` : "";
+  
+      courseDetails.innerHTML = `
+        <h4>${c.title}</h4>
+        <p class="small">${c.desc}</p>
+        <div class="meta">
+          <span class="tag">المستوى: ${c.level}</span>
+          <span class="tag">المدة: ${c.duration}</span>
+          <span class="tag">الجدول: ${c.days}</span>
+          <span class="tag">السعر: ${priceTxt}</span>
           <span class="tag">المقاعد: ${c.seats}</span>
         </div>
-        <h3>${c.title}</h3>
-        <p>${c.desc}</p>
-        <div class="course-foot">
-          <div class="price">${c.price} د.ل</div>
-          <button class="btn primary ripple" data-id="${c.id}">تسجيل</button>
-        </div>
+        ${noteTxt}
       `;
-      grid.appendChild(card);
+      courseDetails.classList.add("show");
     });
   
-    document.querySelectorAll(".course-card .btn.primary").forEach(btn=>{
-      btn.addEventListener("click", ()=> openModal(btn.dataset.id));
-    });
-  
-    observeReveals(); // reattach for new cards
-  }
-  
-  function applyFilters(){
-    if (!searchInput || !levelFilter) return;
-  
-    const q = searchInput.value.trim().toLowerCase();
-    const level = levelFilter.value;
-  
-    const filtered = courses.filter(c=>{
-      const matchesQ = c.title.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q);
-      const matchesLevel = level==="all" ? true : c.level===level;
-      return matchesQ && matchesLevel;
-    });
-  
-    renderCourses(filtered);
-  }
-  
-  // اربط الفلاتر لو موجودة
-  if (searchInput) searchInput.addEventListener("input", applyFilters);
-  if (levelFilter) levelFilter.addEventListener("change", applyFilters);
-  
-  // نرندر البداية بعد ما DOM يجهز
-  window.addEventListener("DOMContentLoaded", () => {
-    renderCourses(courses);
+    observeReveals();
+    setupForm();
   });
   
+  // Form
+  function setupForm(){
+    const form = document.getElementById("regForm");
+    const fullName = document.getElementById("fullName");
+    const ageSelect = document.getElementById("ageSelect");
+    const phone = document.getElementById("phone");
+    const address = document.getElementById("address");
+    const courseSelect = document.getElementById("courseSelect");
+    const savedHint = document.getElementById("savedHint");
   
-  // =========================
-  //  MODAL REGISTRATION
-  // =========================
-  const modal = document.getElementById("regModal");
-  const modalClose = document.getElementById("modalClose");
-  const modalTitle = document.getElementById("modalCourseTitle");
-  const selectedCourseId = document.getElementById("selectedCourseId");
+    // Load draft
+    const draft = JSON.parse(localStorage.getItem("lnex_draft")||"{}");
+    fullName.value = draft.fullName || "";
+    ageSelect.value = draft.age || "";
+    phone.value = draft.phone || "";
+    address.value = draft.address || "";
+    courseSelect.value = draft.courseId || "";
   
-  const regForm = document.getElementById("regForm");
-  const fullName = document.getElementById("fullName");
-  const phone = document.getElementById("phone");
-  const email = document.getElementById("email");
-  const city = document.getElementById("city");
-  const notes = document.getElementById("notes");
-  const savedHint = document.getElementById("savedHint");
-  
-  function openModal(courseId){
-    if (!modal || !modalTitle || !selectedCourseId) return;
-  
-    const course = courses.find(x=>x.id===courseId);
-    if (!course) return;
-  
-    modalTitle.textContent = `التسجيل في: ${course.title}`;
-    selectedCourseId.value = course.id;
-  
-    const draftKey = `lnex_draft_${course.id}`;
-    const draft = JSON.parse(localStorage.getItem(draftKey) || "{}");
-  
-    if (fullName) fullName.value = draft.fullName || "";
-    if (phone) phone.value = draft.phone || "";
-    if (email) email.value = draft.email || "";
-    if (city) city.value = draft.city || "";
-    if (notes) notes.value = draft.notes || "";
-  
-    if (savedHint) {
-      savedHint.textContent = draft.fullName ? "✅ تم استرجاع بياناتك السابقة لهذا الكورس" : "";
-    }
-  
-    modal.classList.add("show");
-  }
-  
-  // إغلاق المودال
-  if (modalClose) modalClose.addEventListener("click", ()=> modal.classList.remove("show"));
-  if (modal) {
-    modal.addEventListener("click", (e)=>{
-      if(e.target === modal) modal.classList.remove("show");
+    // Auto-save
+    [fullName, ageSelect, phone, address, courseSelect].forEach(inp=>{
+      inp.addEventListener("input", ()=>{
+        localStorage.setItem("lnex_draft", JSON.stringify({
+          fullName: fullName.value,
+          age: ageSelect.value,
+          phone: phone.value,
+          address: address.value,
+          courseId: courseSelect.value
+        }));
+        savedHint.textContent = "💾 تم حفظ البيانات مؤقتًا";
+      });
     });
-  }
   
-  // حفظ مؤقت
-  [fullName, phone, email, city, notes].forEach(inp=>{
-    if(!inp) return;
-    inp.addEventListener("input", ()=>{
-      const id = selectedCourseId?.value;
-      if(!id) return;
-  
-      const draftKey = `lnex_draft_${id}`;
-      localStorage.setItem(draftKey, JSON.stringify({
-        fullName: fullName?.value || "",
-        phone: phone?.value || "",
-        email: email?.value || "",
-        city: city?.value || "",
-        notes: notes?.value || ""
-      }));
-  
-      if (savedHint) savedHint.textContent = "💾 تم حفظ البيانات مؤقتًا";
-    });
-  });
-  
-  // Submit
-  if (regForm) {
-    regForm.addEventListener("submit",(e)=>{
+    // Submit
+    form.addEventListener("submit",(e)=>{
       e.preventDefault();
   
-      const id = selectedCourseId?.value;
-      const course = courses.find(x=>x.id===id);
-      if(!course) return;
-  
-      if(fullName && fullName.value.trim().length < 3) return alert("رجاءً أدخل اسم صحيح");
-      if(phone && !phone.value.match(/^09\d{8}$/)) return alert("رقم الهاتف لازم يكون بصيغة 09xxxxxxxx");
+      const c = courses.find(x=>x.id===courseSelect.value);
+      if(!c) return alert("رجاءً اختر كورس");
+      if(fullName.value.trim().length < 3) return alert("رجاءً أدخل اسم صحيح");
+      if(!ageSelect.value) return alert("رجاءً اختر العمر");
+      if(!phone.value.match(/^09\d{8}$/)) return alert("رقم الهاتف لازم يكون 09xxxxxxxx");
+      if(address.value.trim().length < 3) return alert("رجاءً أدخل مكان السكن");
   
       const regs = JSON.parse(localStorage.getItem("lnex_regs")||"[]");
       regs.push({
         id: safeId(),
-        courseId: id,
-        courseTitle: course.title,
-        fullName: fullName?.value.trim() || "",
-        phone: phone?.value.trim() || "",
-        email: email?.value.trim() || "",
-        city: city?.value.trim() || "",
-        notes: notes?.value.trim() || "",
+        fullName: fullName.value.trim(),
+        age: ageSelect.value,
+        phone: phone.value.trim(),
+        address: address.value.trim(),
+        courseId: c.id,
+        courseTitle: c.title,
         createdAt: new Date().toISOString()
       });
-  
       localStorage.setItem("lnex_regs", JSON.stringify(regs));
-      localStorage.removeItem(`lnex_draft_${id}`);
+      localStorage.removeItem("lnex_draft");
   
-      alert("✅ تم تسجيلك بنجاح! سيتم التواصل معك قريبًا.");
-      regForm.reset();
-      modal.classList.remove("show");
+      alert("✅ تم تسجيلك بنجاح! سيتم التواصل معك عبر واتساب.");
+      form.reset();
+      savedHint.textContent = "";
+      document.getElementById("courseDetails").classList.remove("show");
+      document.getElementById("courseDetails").innerHTML = "";
     });
   }
   
-  
-  // =========================
-  //  THEME TOGGLE
-  // =========================
-  const themeToggle = document.getElementById("themeToggle");
-  const savedTheme = localStorage.getItem("lnex_theme");
-  if(savedTheme==="light") document.body.classList.add("light");
-  
-  function updateThemeIcon(){
-    if(!themeToggle) return;
-    themeToggle.textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
-  }
-  updateThemeIcon();
-  
-  if (themeToggle){
-    themeToggle.addEventListener("click", ()=>{
-      document.body.classList.toggle("light");
-      localStorage.setItem("lnex_theme", document.body.classList.contains("light") ? "light" : "dark");
-      updateThemeIcon();
-    });
-  }
-  
-  
-  // =========================
-  //  MOBILE MENU
-  // =========================
-  const hamburger = document.getElementById("hamburger");
-  const navLinks = document.getElementById("navLinks");
-  
-  if (hamburger && navLinks){
-    hamburger.addEventListener("click", ()=> navLinks.classList.toggle("show"));
-    navLinks.querySelectorAll("a").forEach(a=> 
-      a.addEventListener("click", ()=> navLinks.classList.remove("show"))
-    );
-    window.addEventListener("scroll", ()=> navLinks.classList.remove("show"));
-  }
-  
-  
-  // =========================
-  //  SMOOTH SCROLL
-  // =========================
-  function scrollToSection(id){
-    const el = document.getElementById(id);
-    if(!el) return;
-    el.scrollIntoView({behavior:"smooth"});
-    navLinks?.classList.remove("show");
-  }
-  window.scrollToSection = scrollToSection;
-  
-  
-  // =========================
-  //  SCROLL REVEAL (FIXED ✅)
-  // =========================
-  let revealObserver = null;
-  
+  // Reveal
+  let ro=null;
   function observeReveals(){
-    const reveals = document.querySelectorAll(".reveal");
-    if(!reveals.length) return;
-  
-    if(revealObserver !== null){
-      revealObserver.disconnect();
-    }
-  
-    revealObserver = new IntersectionObserver((entries)=>{
-      entries.forEach(entry=>{
-        if(entry.isIntersecting){
-          entry.target.classList.add("show");
-          revealObserver.unobserve(entry.target);
+    const els=document.querySelectorAll(".reveal");
+    ro?.disconnect();
+    ro=new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{
+        if(en.isIntersecting){
+          en.target.classList.add("show");
+          ro.unobserve(en.target);
         }
-      });
-    },{threshold:0.12});
-  
-    reveals.forEach(r=>revealObserver.observe(r));
+      })
+    },{threshold:.12});
+    els.forEach(e=>ro.observe(e));
   }
   
-  // تشغيلها بعد جاهزية DOM
-  window.addEventListener("DOMContentLoaded", observeReveals);
-  
-  
-  // =========================
-  //  RIPPLE POSITION
-  // =========================
+  // Ripple
   document.addEventListener("click",(e)=>{
-    const btn = e.target.closest(".ripple");
+    const btn=e.target.closest(".ripple");
     if(!btn) return;
-    const rect = btn.getBoundingClientRect();
-    btn.style.setProperty("--rx", (e.clientX - rect.left) + "px");
-    btn.style.setProperty("--ry", (e.clientY - rect.top)  + "px");
+    const r=btn.getBoundingClientRect();
+    btn.style.setProperty("--rx",(e.clientX-r.left)+"px");
+    btn.style.setProperty("--ry",(e.clientY-r.top)+"px");
   });
   

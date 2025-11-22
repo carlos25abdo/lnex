@@ -2,259 +2,94 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LNEX - خبراء الشبكات الليبيين</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>LNEX - تسجيل الكورسات</title>
 
-  <!-- Tajawal Font -->
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- ================= LOADING INTRO ================= -->
-  <div id="loading-screen">
+  <!-- Loading -->
+  <div id="loading-screen" aria-hidden="true">
     <div class="loading-word">
-     <span>X</span> <span>N</span><span>E</span><span>L</span>
+      <span>L</span><span>E</span><span>N</span><span>X</span>
     </div>
   </div>
 
-  <!-- ================= NAVBAR ================= -->
-  <nav class="navbar">
-    <div class="container nav-inner">
-      
-      <!-- ✅ مكان الشعار في الهيدر -->
-      <a class="brand" href="#home">
-        <div class="logo">
-          <!-- ضع شعارك هنا: img/logo.png -->
-          <img src="img/logo.jpg" alt="LNEX Logo" onerror="this.style.display='none'; document.querySelector('.logo-fallback').style.display='grid';">
-          <div class="logo-fallback">LNEX</div>
-        </div>
-        <div class="brand-text">
-          <h1>LNEX</h1>
-          <p>خبراء الشبكات الليبيين للتدريب والتطوير</p>
-        </div>
-      </a>
-
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#home">الرئيسية</a></li>
-        <li><a href="#courses">الكورسات</a></li>
-        <li><a href="#about">من نحن</a></li>
-        <li><a href="#contact">تواصل</a></li>
-      </ul>
-
-      <div class="nav-actions">
-        <button class="btn ghost ripple" id="themeToggle" aria-label="toggle theme">🌙</button>
-        <button class="btn primary ripple" onclick="scrollToSection('courses')">سجّل الآن</button>
-        <button class="hamburger" id="hamburger">☰</button>
-      </div>
+  <!-- Page -->
+  <main class="page">
+    <div class="bg">
+      <div class="bg-img"></div>
+      <div class="bg-glow"></div>
+      <div class="bg-dim"></div>
     </div>
-  </nav>
 
-
-  <!-- ================= HERO ================= -->
-  <header class="hero" id="home">
-    <!-- ✅ خلفية الهيرو من صورة الغلاف -->
-    <div class="hero-bg"></div>
-    <div class="hero-overlay"></div>
-
-    <div class="container hero-grid">
-      <div class="hero-text reveal">
-        <span class="pill">LNEX • Training & Development</span>
-        <h2>انطلق بمستقبلك التقني مع كورسات LNEX الاحترافية</h2>
-        <p>
-          تدريب عملي في الشبكات، الأمن السيبراني، البرمجة، والأنظمة.
-          شهادات + متابعة + مشاريع حقيقية.
-        </p>
-        <div class="hero-actions">
-          <button class="btn primary ripple" onclick="scrollToSection('courses')">استعراض الكورسات</button>
-          <button class="btn outline ripple" onclick="scrollToSection('about')">تعرف علينا</button>
-        </div>
-
-        <div class="hero-stats">
-          <div class="stat reveal">
-            <h3>+1200</h3><p>متدرب</p>
+    <section class="wrap">
+      <header class="topbar glass">
+        <div class="brand">
+          <div class="logo">
+            <img src="img/logo.jpg" alt="LNEX Logo">
           </div>
-          <div class="stat reveal">
-            <h3>+45</h3><p>كورس</p>
-          </div>
-          <div class="stat reveal">
-            <h3>96%</h3><p>رضا المتدربين</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="hero-card reveal">
-        <div class="mini-card glass">
-          <h3>عرض هذا الشهر 🎁</h3>
-          <p>خصم 20% على كورسات الشبكات والبرمجة</p>
-          <button class="btn primary full ripple" onclick="scrollToSection('courses')">احجز مقعدك</button>
-        </div>
-
-        <div class="hero-visual glass">
-          <div class="scanline"></div>
-          <div class="floating-badge">💼 تدريب عملي</div>
-          <div class="floating-badge second">📜 شهادات</div>
-        </div>
-      </div>
-    </div>
-  </header>
-
-
-  <!-- ================= COURSES ================= -->
-  <section class="section" id="courses">
-    <div class="container">
-      <div class="section-head reveal">
-        <div>
-          <h2>الكورسات المتاحة</h2>
-          <p>اختر مسارك وسجّل مباشرة</p>
-        </div>
-        <div class="filters">
-          <input type="text" id="searchInput" placeholder="ابحث عن كورس..." />
-          <select id="levelFilter">
-            <option value="all">كل المستويات</option>
-            <option value="beginner">مبتدئ</option>
-            <option value="intermediate">متوسط</option>
-            <option value="advanced">متقدم</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="courses-grid" id="coursesGrid"></div>
-    </div>
-  </section>
-
-
-  <!-- ================= ABOUT ================= -->
-  <section class="section muted" id="about">
-    <div class="container about-grid">
-      <div class="about-text reveal">
-        <h2>من نحن</h2>
-        <p>
-          LNEX مركز تدريبي متخصص في تقنيات الشبكات الحديثة، الأمن السيبراني، البرمجة
-          وحلول المؤسسات. نشتغل على إعداد شباب سوق العمل بمنهج عملي قوي.
-        </p>
-        <ul class="checklist">
-          <li>✅ مشاريع تطبيقية حقيقية</li>
-          <li>✅ مدربين خبرة سوق</li>
-          <li>✅ متابعة بعد الكورس</li>
-          <li>✅ شهادات معتمدة</li>
-        </ul>
-      </div>
-
-      <div class="about-cards">
-        <div class="info-card reveal glass"><h3>رؤيتنا</h3><p>صناعة محترفين يقودوا التحول الرقمي.</p></div>
-        <div class="info-card reveal glass"><h3>رسالتنا</h3><p>تدريب متطور بأسلوب بسيط ومقنع.</p></div>
-        <div class="info-card reveal glass"><h3>قيمنا</h3><p>احتراف • التزام • تطوير • إبداع.</p></div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ================= CONTACT ================= -->
-  <section class="section" id="contact">
-    <div class="container contact-grid">
-      <div class="reveal">
-        <h2>تواصل معنا</h2>
-        <p>جاهزين لأي استفسار</p>
-
-        <div class="contact-cards">
-          <div class="contact-card glass reveal">
-            <h4>📍 العنوان</h4><p>مصراتة – شارع طرابلس</p>
-          </div>
-          <div class="contact-card glass reveal">
-            <h4>📞 الهاتف</h4><p>0910000000 / 0920000000</p>
-          </div>
-          <div class="contact-card glass reveal">
-            <h4>✉️ البريد</h4><p>info@lnex.ly</p>
-          </div>
-        </div>
-      </div>
-
-      <form class="contact-form glass reveal" onsubmit="event.preventDefault(); alert('تم استلام رسالتك ✅'); this.reset();">
-        <h3>أرسل رسالة</h3>
-        <label>الاسم</label>
-        <input required type="text" placeholder="اسمك الكامل" />
-        <label>البريد</label>
-        <input required type="email" placeholder="example@mail.com" />
-        <label>الرسالة</label>
-        <textarea required placeholder="اكتب رسالتك هنا..."></textarea>
-        <button class="btn primary full ripple">إرسال</button>
-      </form>
-    </div>
-  </section>
-
-
-  <!-- ================= FOOTER ================= -->
-  <footer class="footer">
-    <div class="container footer-inner reveal">
-      <div class="footer-brand">
-        <!-- ✅ شعار صغير في الفوتر -->
-        <img src="img/logo.jpg" alt="LNEX Logo">
-        <div>
-          <h3>LNEX</h3>
-          <p class="small">خبراء الشبكات الليبيين للتدريب والتطوير</p>
-        </div>
-      </div>
-
-      <div class="footer-links">
-        <a href="#home">الرئيسية</a>
-        <a href="#courses">الكورسات</a>
-        <a href="#about">من نحن</a>
-        <a href="#contact">تواصل</a>
-      </div>
-    </div>
-    <p class="small center">© LNEX 2025 — All rights reserved</p>
-  </footer>
-
-
-  <!-- ================= REGISTRATION MODAL ================= -->
-  <div class="modal" id="regModal">
-    <div class="modal-content glass">
-      <button class="modal-close" id="modalClose">✕</button>
-      <h3 id="modalCourseTitle">التسجيل في الكورس</h3>
-
-      <form id="regForm">
-        <div class="form-row">
-          <div class="form-group">
-            <label>الاسم الكامل</label>
-            <input type="text" id="fullName" required placeholder="مثال: أحمد محمد" />
-          </div>
-          <div class="form-group">
-            <label>رقم الهاتف</label>
-            <input type="tel" id="phone" required placeholder="09xxxxxxxx" />
+          <div class="brand-text">
+            <h1>LNEX</h1>
+            <p>خبراء الشبكات الليبيين للتدريب والتطوير</p>
           </div>
         </div>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label>البريد الإلكتروني</label>
-            <input type="email" id="email" required placeholder="example@mail.com" />
-          </div>
-          <div class="form-group">
-            <label>المدينة</label>
-            <input type="text" id="city" placeholder="مصراتة / طرابلس ..." />
-          </div>
+        <div class="topbar-note">
+          سجل بياناتك واختر الكورس المناسب وسيتم التواصل معك عبر واتساب ✅
         </div>
+      </header>
 
-        <div class="form-group">
-          <label>ملاحظات (اختياري)</label>
-          <textarea id="notes" placeholder="أي تفاصيل إضافية..."></textarea>
-        </div>
+      <section class="card glass reveal">
+        <h2 class="card-title">نموذج التسجيل</h2>
 
-        <input type="hidden" id="selectedCourseId" />
+        <form id="regForm" class="form" novalidate>
 
-        <button class="btn primary full ripple" type="submit">تأكيد التسجيل</button>
-        <p class="small center" id="savedHint"></p>
-      </form>
-    </div>
-  </div>
+          <div class="field">
+            <label for="fullName">الاسم الكامل *</label>
+            <input id="fullName" type="text" required placeholder="مثال: أحمد محمد" />
+          </div>
 
-  <!-- Mobile Sticky CTA -->
-  <button class="mobile-cta ripple" onclick="scrollToSection('courses')">
-    سجّل في كورس الآن 🚀
-  </button>
+          <div class="field two">
+            <div>
+              <label for="ageSelect">العمر *</label>
+              <select id="ageSelect" required></select>
+            </div>
 
-  <script src="script.js"></script>
+            <div>
+              <label for="phone">رقم الهاتف (واتساب) *</label>
+              <input id="phone" type="tel" required placeholder="09xxxxxxxx" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="address">مكان السكن *</label>
+            <input id="address" type="text" required placeholder="مثال: مصراتة - شارع طرابلس" />
+          </div>
+
+          <div class="field">
+            <label for="courseSelect">اختر الكورس *</label>
+            <select id="courseSelect" required></select>
+          </div>
+
+          <div id="courseDetails" class="course-details glass"></div>
+
+          <button class="btn primary ripple" type="submit">
+            تأكيد التسجيل
+          </button>
+
+          <p id="savedHint" class="hint"></p>
+        </form>
+      </section>
+
+      <footer class="footer glass">
+        © LNEX 2025 — كل الحقوق محفوظة
+      </footer>
+    </section>
+  </main>
+
+  <script src="script.js" defer></script>
 </body>
 </html>
